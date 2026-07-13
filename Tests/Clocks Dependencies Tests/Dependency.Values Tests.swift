@@ -15,26 +15,32 @@ import Testing
 
 @testable import Clocks_Dependencies
 
-extension Dependency.Values {
-    @Suite
-    struct Test {
-        @Suite struct Unit {}
-        @Suite struct `Edge Case` {}
-        @Suite struct Integration {}
-    }
+// Parallel-namespace suite: `Dependency.Values` is spelled through the
+// generic `Dependency` wrapper, so an extension-hosted suite puts the
+// @Test macro's emitted type path in a generic context. The top-level
+// backtick-named suite is the sanctioned escape.
+@Suite
+struct `Dependency.Values Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
 }
 
-extension Dependency.Values.Test.Unit {
+extension `Dependency.Values Tests`.Unit {
     @Test
-    func `test context resolves the clock without suspension`() async throws {
-        @Dependency(\.clock) var clock
+    func `test mode resolves the clock to an immediate clock`() async throws {
+        // A bare test runs in live mode; the key's testValue leg is asserted
+        // by entering test mode explicitly.
+        try await withDependencies(mode: .test) {
+            @Dependency(\.clock) var clock
 
-        let wall = ContinuousClock()
-        let start = wall.now
-        try await clock.sleep(for: .seconds(60))
-        let elapsed = start.duration(to: wall.now)
+            let wall = ContinuousClock()
+            let start = wall.now
+            try await clock.sleep(for: .seconds(2))
+            let elapsed = start.duration(to: wall.now)
 
-        #expect(elapsed < .seconds(5))
+            #expect(elapsed < .seconds(1))
+        }
     }
 
     @Test
@@ -55,7 +61,7 @@ extension Dependency.Values.Test.Unit {
     }
 }
 
-extension Dependency.Values.Test.`Edge Case` {
+extension `Dependency.Values Tests`.`Edge Case` {
     @Test
     func `sleeping for a zero duration returns immediately`() async throws {
         @Dependency(\.clock) var clock
@@ -68,17 +74,17 @@ extension Dependency.Values.Test.`Edge Case` {
     }
 }
 
-extension Dependency.Values.Test.Integration {
+extension `Dependency.Values Tests`.Integration {
     @Test(.dependency(\.clock, Clock.`Any`(Clock.Immediate())))
     func `the dependency trait overrides the clock for a test`() async throws {
         @Dependency(\.clock) var clock
 
         let wall = ContinuousClock()
         let start = wall.now
-        try await clock.sleep(for: .seconds(60))
+        try await clock.sleep(for: .seconds(2))
         let elapsed = start.duration(to: wall.now)
 
-        #expect(elapsed < .seconds(5))
+        #expect(elapsed < .seconds(1))
     }
 
     @Test
