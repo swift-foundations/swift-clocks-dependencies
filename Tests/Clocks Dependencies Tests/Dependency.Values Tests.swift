@@ -105,7 +105,16 @@ extension `Dependency.Values Tests`.Integration {
             // Wait until the sleeper has actually suspended on the test
             // clock (checkSuspension throws once an active sleep exists),
             // then drive the clock past every scheduled deadline.
-            while (try? test.checkSuspension()) != nil {
+            func isSuspended() -> Bool {
+                do throws(Clock.Test.Suspension.Error) {
+                    try test.checkSuspension()
+                    return false
+                } catch {
+                    return true
+                }
+            }
+
+            while !isSuspended() {
                 await Task.yield()
             }
             test.run()

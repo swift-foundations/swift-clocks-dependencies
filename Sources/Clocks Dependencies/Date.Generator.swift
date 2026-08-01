@@ -38,11 +38,13 @@ extension Date {
         public init(_ generate: @escaping @Sendable () -> Date) {
             self.generate = generate
         }
+    }
+}
 
-        /// Returns the current date from the underlying closure.
-        public func callAsFunction() -> Date {
-            generate()
-        }
+extension Date.Generator {
+    /// Returns the current date from the underlying closure.
+    public func callAsFunction() -> Date {
+        generate()
     }
 }
 

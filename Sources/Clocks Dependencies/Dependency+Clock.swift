@@ -27,7 +27,9 @@ public import Dependencies
 /// @Test(.dependency(\.clock, Clock.`Any`(Clock.Test())))
 /// func testTimedFeature() async { ... }
 /// ```
-private enum Key: Dependency.Key {
+private enum Key: Dependency.Key {}
+
+extension Key {
     typealias Value = Clock.`Any`<Duration>
 }
 

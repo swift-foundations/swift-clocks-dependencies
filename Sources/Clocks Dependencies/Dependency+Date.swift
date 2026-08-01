@@ -26,7 +26,9 @@ public import Foundation
 /// @Test(.dependency(\.date, .constant(Date(timeIntervalSince1970: 0))))
 /// func timedFeature() { ... }
 /// ```
-private enum Key: Dependency.Key {
+private enum Key: Dependency.Key {}
+
+extension Key {
     typealias Value = Date.Generator
 }
 
