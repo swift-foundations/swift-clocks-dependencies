@@ -1,17 +1,5 @@
 // swift-tools-version: 6.4
 
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-clocks-dependencies open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-clocks-dependencies
-// project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 import PackageDescription
 
 let package = Package(
@@ -24,8 +12,7 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        // The clocks × dependencies integration: a type-erased clock as a
-        // dependency value.
+
         .library(
             name: "Clocks Dependencies",
             targets: ["Clocks Dependencies"]

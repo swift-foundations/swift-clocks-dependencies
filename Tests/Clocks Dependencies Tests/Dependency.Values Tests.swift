@@ -1,24 +1,8 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-clocks-dependencies open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-clocks-dependencies
-// project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 import Dependencies_Test_Support
 import Testing
 
 @testable import Clocks_Dependencies
 
-// Parallel-namespace suite: `Dependency.Values` is spelled through the
-// generic `Dependency` wrapper, so an extension-hosted suite puts the
-// @Test macro's emitted type path in a generic context. The top-level
-// backtick-named suite is the sanctioned escape.
 @Suite
 struct `Dependency.Values Tests` {
     @Suite struct Unit {}
@@ -29,8 +13,7 @@ struct `Dependency.Values Tests` {
 extension `Dependency.Values Tests`.Unit {
     @Test
     func `test mode resolves the clock to an immediate clock`() async throws {
-        // A bare test runs in live mode; the key's testValue leg is asserted
-        // by entering test mode explicitly.
+
         try await withDependencies(mode: .test) {
             @Dependency(\.clock) var clock
 
@@ -102,9 +85,6 @@ extension `Dependency.Values Tests`.Integration {
                 return true
             }()
 
-            // Wait until the sleeper has actually suspended on the test
-            // clock (checkSuspension throws once an active sleep exists),
-            // then drive the clock past every scheduled deadline.
             func isSuspended() -> Bool {
                 do throws(Clock.Test.Suspension.Error) {
                     try test.checkSuspension()

@@ -1,25 +1,9 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-clocks-dependencies open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-clocks-dependencies
-// project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 import Dependencies_Test_Support
 import Foundation
 import Testing
 
 @testable import Clocks_Dependencies
 
-// Parallel-namespace suite: `Dependency.Values` is spelled through the
-// generic `Dependency` wrapper, so an extension-hosted suite puts the
-// @Test macro's emitted type path in a generic context. The top-level
-// backtick-named suite is the sanctioned escape.
 @Suite
 struct `Dependency.Values Date Tests` {
     @Suite struct Unit {}
